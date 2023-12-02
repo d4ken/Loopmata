@@ -31,16 +31,16 @@ def main(page: ft.Page):
         id = uuid.uuid4()
         if task_type == TaskType.Click:
             cbx = ft.Checkbox(
-                label=f"Click: ({input_x.value}, {input_y.value}), duration:{mouse_duration.value}")
+                label=f"Click: ({input_x.value}, {input_y.value}), duration: {mouse_duration.value}ms")
             operation_dict = {'id': id, 'type': task_type, 'op': (input_x.value, input_y.value),
                               'duration': mouse_duration.value}
         elif task_type == TaskType.Drag:
             cbx = ft.Checkbox(
-                label=f"DRAG: ({input_x.value}, {input_y.value}), duration:{mouse_duration.value}")
+                label=f"DRAG: ({input_x.value}, {input_y.value}), duration: {mouse_duration.value}ms")
             operation_dict = {'id': id, 'type': task_type, 'op': (input_x.value, input_y.value),
                               'duration': mouse_duration.value}
         elif task_type == TaskType.Write:
-            cbx = ft.Checkbox(label=f"Type: {input_field.value}, duration:{key_input_duration}")
+            cbx = ft.Checkbox(label=f"Type: {input_field.value}, duration: {key_input_duration.value}ms")
             operation_dict = {'id': id, 'type': task_type, 'op': input_field.value,
                               'duration': key_input_duration}
         task = ft.Row(
@@ -191,7 +191,7 @@ def main(page: ft.Page):
                 # bgcolor=ft.colors.GREY,
                 padding=5,
             ),
-            ft.Text(value="🖱 MOUSE INPUT", size=20, weight=ft.FontWeight.W_700),
+            ft.Text(value="🖱 MOUSE INPUT", size=20, weight=ft.FontWeight.W_700, tooltip="Add mouse position with middle click"),
             ft.Row(
                 controls=[
                     ft.Column(
