@@ -29,23 +29,35 @@ def main(page: ft.Page):
     global is_execute
 
     def add_task(e, task_type):
+        if delta_x.value == "":
+            delta_x.value = 0
+        if delta_y.value == "":
+            delta_y.value = 0
+        if mouse_duration.value == "":
+            mouse_duration.value = 30
+        if key_input_duration.value == "":
+            key_input_duration.value = 10
+
         cbx = ft.Checkbox()
         operation_dict = dict()
         id = uuid.uuid4()
         if task_type == TaskType.Click:
-            cbx = ft.Checkbox(
-                label=f"CLICK : ({input_x.value}, {input_y.value}), duration: {mouse_duration.value}ms")
-            operation_dict = {'id': id, 'type': task_type, 'op': (input_x.value, input_y.value),
-                              'duration': mouse_duration.value}
-        elif task_type == TaskType.Drag:
-            cbx = ft.Checkbox(
-                label=f"DRAG : ({input_x.value}, {input_y.value}), duration: {mouse_duration.value}ms")
-            operation_dict = {'id': id, 'type': task_type, 'op': (input_x.value, input_y.value),
-                              'duration': mouse_duration.value}
+            if delta_x != 0 or delta_y != 0:
+                cbx = ft.Checkbox(
+                    label=f"{task_type.name} : ({input_x.value}, {input_y.value}), delta : ({int(delta_x.value)}, {int(delta_y.value)}), duration: {mouse_duration.value}ms")
+                operation_dict = {'id': id, 'type': task_type, 'op': (input_x.value, input_y.value),
+                                  'delta': (int(delta_x.value), int(delta_y.value)),
+                                  'duration': mouse_duration.value}
+            else:
+                cbx = ft.Checkbox(
+                    label=f"CLICK : ({input_x.value}, {input_y.value}), duration: {mouse_duration.value}ms")
+                operation_dict = {'id': id, 'type': task_type, 'op': (input_x.value, input_y.value),
+                                  'duration': mouse_duration.value}
+
         elif task_type == TaskType.Write:
-            cbx = ft.Checkbox(label=f"WRITE : {input_field.value}, duration: {key_input_duration.value}ms")
+            cbx = ft.Checkbox(label=f"{task_type.name} : {input_field.value}, duration: {key_input_duration.value}ms")
             operation_dict = {'id': id, 'type': task_type, 'op': input_field.value,
-                              'duration': key_input_duration}
+                              'duration': key_input_duration.value}
         task = ft.Row(
             [
                 cbx,
@@ -92,25 +104,25 @@ def main(page: ft.Page):
         is_execute = True
         counter = 0
         while is_execute and counter < int(loop_count.value):
+            print(counter)
             for task in task_dict.values():
                 if is_execute is False:
                     break
                 if task['type'] == TaskType.Click:
-                    pyautogui.moveTo(task['op'][0] + counter * int(delta_x.value),
-                                     task['op'][1] + counter * int(delta_y.value), int(task['duration']) / 1000,
+                    pyautogui.moveTo(task['op'][0] + counter * int(task['delta'][0]),
+                                     task['op'][1] + counter * int(task['delta'][1]), int(task['duration']) / 1000,
                                      pyautogui.easeOutQuad)
                     pyautogui.click()
 
                 elif task['type'] == TaskType.Drag:
                     pyautogui.mouseDown()
-                    pyautogui.dragTo(task['op'][0] + counter * int(delta_x.value),
-                                     task['op'][1] + counter * int(delta_y.value), int(task['duration']) / 1000,
+                    pyautogui.dragTo(task['op'][0] + counter * int(task['delta'][0]),
+                                     task['op'][1] + counter * int(task['delta'][1]), int(task['duration']) / 1000,
                                      button='left')
                     pyautogui.mouseUp()
 
                 elif task['type'] == TaskType.Write:
-                    pyautogui.click()
-                    pyautogui.write(task['op'], float(task['duration']) / 1000)
+                    pyautogui.write(task['op'], int(task['duration']) / 1000)
 
                 print(f"{task['type']}: {task['op']}")
             counter += 1
@@ -127,12 +139,23 @@ def main(page: ft.Page):
         global is_execute
         is_execute = False
 
-    # 中クリックで位置保存
     def on_click(x, y, button, pressed):
+        # 中クリックの場合
         if not pressed and str(button) == "Button.middle":
             input_x.value = x
             input_y.value = y
+            # 増分初期化
+            delta_x.value = 0
+            delta_y.value = 0
             view.update()
+
+    def update_position(x, y):
+        current_x_text.value = x
+        current_y_text.value = y
+        if input_x.value != "" and input_y.value != "":
+            delta_x_text.value = x - input_x.value
+            delta_y_text.value = y - input_y.value
+        view.update()
 
     def on_press(key):
         global is_execute
@@ -161,11 +184,17 @@ def main(page: ft.Page):
                               value="3")
     input_x = ft.TextField(hint_text="Pos X", expand=False, width=80, input_filter=ft.NumbersOnlyInputFilter())
     input_y = ft.TextField(hint_text="Pos Y", expand=False, width=80, input_filter=ft.NumbersOnlyInputFilter())
-    delta_x = ft.TextField(hint_text="Loop Delta X", expand=False, width=80, input_filter=ft.NumbersOnlyInputFilter(),
-                           value="0")
-    delta_y = ft.TextField(hint_text="Loop Delta Y", expand=False, width=80, value="0",
+    delta_x = ft.TextField(hint_text="Delta X", expand=False, width=80, input_filter=ft.NumbersOnlyInputFilter())
+    delta_y = ft.TextField(hint_text="Delta Y", expand=False, width=80,
                            input_filter=ft.NumbersOnlyInputFilter())
-    mouse_duration = ft.TextField(hint_text="Duration(ms)", expand=False, value="200",
+
+    # リアルタイム表示テキスト
+    current_x_text = ft.Text(value="0")
+    current_y_text = ft.Text(value="0")
+    delta_x_text = ft.Text(value="0")
+    delta_y_text = ft.Text(value="0")
+
+    mouse_duration = ft.TextField(hint_text="Duration(ms)", expand=False, value="150",
                                   input_filter=ft.NumbersOnlyInputFilter(), width=100)
     input_field = ft.TextField(hint_text="Input words here...", expand=True)
     key_input_duration = ft.TextField(hint_text="Duration(ms)", expand=False, width=70, value="100",
@@ -228,6 +257,28 @@ def main(page: ft.Page):
                     ),
                     ft.Column(
                         controls=[
+                            ft.Text(value="⏳ Realtime Info", size=20, weight=ft.FontWeight.W_600),
+                            ft.Row(
+                                controls=[
+                                    ft.Text(value=f"Current Position: ( x:"),
+                                    current_x_text,
+                                    ft.Text(value=", y:"),
+                                    current_y_text,
+                                    ft.Text(value=")")
+                                ]
+                            ),
+                            ft.Row(
+                                controls=[
+                                    ft.Text(value=f"Previous Delta: ( x:"),
+                                    delta_x_text,
+                                    ft.Text(value=", y:"),
+                                    delta_y_text,
+                                    ft.Text(value=")")
+                                ]
+                            ),
+                            ft.Container(
+                                padding=10
+                            ),
                             ft.Row(
                                 controls=[
                                     ft.Text(value="Click : ", size=16, weight=ft.FontWeight.W_600),
@@ -273,6 +324,7 @@ def main(page: ft.Page):
 
     mouse_listener = mouse.Listener(
         on_click=on_click,
+        on_move=update_position,
     )
     mouse_listener.start()
 
