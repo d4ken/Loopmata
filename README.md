@@ -1,11 +1,12 @@
 ## Loopmata
 fletとpyautoguiを用いたデスクトップ自動操作ツール
 
-![Loopmata_ss](https://github.com/d4ken/flet-automata/assets/112839844/f62fdc0f-880a-47b2-ae11-663df736e6f8)
+![Loopmata_ss_1204](https://github.com/d4ken/Loopmata/assets/112839844/614595d3-2024-48a0-9f37-cb8c60283d68)
 
-### 機能
+
 +ボタンでOperationを追加でき、実行時にはOperationに追加されている順番でLoop回繰り返す
 
+### 機能
 - 左クリック操作
 - ドラッグ操作
 - キー入力
