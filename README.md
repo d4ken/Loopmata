@@ -1,4 +1,4 @@
-## flet-automata
+## Loopmata
 fletとpyautoguiを用いたデスクトップ自動操作ツール
 
 ![Loopmata_ss](https://github.com/d4ken/flet-automata/assets/112839844/f62fdc0f-880a-47b2-ae11-663df736e6f8)
