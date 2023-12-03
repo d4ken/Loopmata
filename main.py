@@ -31,16 +31,16 @@ def main(page: ft.Page):
         id = uuid.uuid4()
         if task_type == TaskType.Click:
             cbx = ft.Checkbox(
-                label=f"Click: ({input_x.value}, {input_y.value}), duration: {mouse_duration.value}ms")
+                label=f"CLICK : ({input_x.value}, {input_y.value}), duration: {mouse_duration.value}ms")
             operation_dict = {'id': id, 'type': task_type, 'op': (input_x.value, input_y.value),
                               'duration': mouse_duration.value}
         elif task_type == TaskType.Drag:
             cbx = ft.Checkbox(
-                label=f"DRAG: ({input_x.value}, {input_y.value}), duration: {mouse_duration.value}ms")
+                label=f"DRAG : ({input_x.value}, {input_y.value}), duration: {mouse_duration.value}ms")
             operation_dict = {'id': id, 'type': task_type, 'op': (input_x.value, input_y.value),
                               'duration': mouse_duration.value}
         elif task_type == TaskType.Write:
-            cbx = ft.Checkbox(label=f"Type: {input_field.value}, duration: {key_input_duration.value}ms")
+            cbx = ft.Checkbox(label=f"WRITE : {input_field.value}, duration: {key_input_duration.value}ms")
             operation_dict = {'id': id, 'type': task_type, 'op': input_field.value,
                               'duration': key_input_duration}
         task = ft.Row(
@@ -94,14 +94,14 @@ def main(page: ft.Page):
                     break
                 if task['type'] == TaskType.Click:
                     pyautogui.moveTo(task['op'][0] + counter * int(delta_x.value),
-                                     task['op'][1] + counter * int(delta_y.value), float(task['duration']) / 1000,
+                                     task['op'][1] + counter * int(delta_y.value), int(task['duration']) / 1000,
                                      pyautogui.easeOutQuad)
                     pyautogui.click()
 
                 elif task['type'] == TaskType.Drag:
                     pyautogui.mouseDown()
                     pyautogui.dragTo(task['op'][0] + counter * int(delta_x.value),
-                                     task['op'][1] + counter * int(delta_y.value), float(task['duration']) / 1000,
+                                     task['op'][1] + counter * int(delta_y.value), int(task['duration']) / 1000,
                                      button='left')
                     pyautogui.mouseUp()
 
