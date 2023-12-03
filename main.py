@@ -3,7 +3,10 @@ from enum import Enum
 import flet as ft
 import pyautogui
 from pynput import mouse, keyboard
+import pretty_errors
+from rich import print
 
+pretty_errors.activate()
 is_execute = False
 
 
@@ -150,7 +153,8 @@ def main(page: ft.Page):
     add_keyboard_button = ft.FloatingActionButton(icon=ft.icons.ADD_ROUNDED, on_click=add_textfield)
     clear_all_task_button = ft.IconButton(icon=ft.icons.CLEAR_ALL, on_click=clear_all_task, tooltip="Clear Operation")
 
-    exec_button = ft.FloatingActionButton(icon=ft.icons.PLAY_ARROW, on_click=play, bgcolor=ft.colors.GREY, tooltip="Play")
+    exec_button = ft.FloatingActionButton(icon=ft.icons.PLAY_ARROW, on_click=play, bgcolor=ft.colors.GREY,
+                                          tooltip="Play")
     pause_button = ft.FloatingActionButton(icon=ft.icons.PAUSE, on_click=pause, bgcolor=ft.colors.CYAN,
                                            tooltip="Pause (F9)")
     loop_count = ft.TextField(expand=False, width=80, input_filter=ft.NumbersOnlyInputFilter(),
@@ -191,7 +195,8 @@ def main(page: ft.Page):
                 # bgcolor=ft.colors.GREY,
                 padding=5,
             ),
-            ft.Text(value="🖱 MOUSE INPUT", size=20, weight=ft.FontWeight.W_700, tooltip="Add mouse position with middle click"),
+            ft.Text(value="🖱 MOUSE INPUT", size=20, weight=ft.FontWeight.W_700,
+                    tooltip="Add mouse position with middle click"),
             ft.Row(
                 controls=[
                     ft.Column(
