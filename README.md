@@ -1,9 +1,7 @@
 ## Loopmata
-fletとpyautoguiを用いたデスクトップ自動操作ツール
 
+[flet](https://github.com/flet-dev/flet)と[pyautogui](https://github.com/asweigart/pyautogui)を用いたデスクトップ自動操作ツール
 ![Loopmata_ss_1204](https://github.com/d4ken/Loopmata/assets/112839844/614595d3-2024-48a0-9f37-cb8c60283d68)
-
-
 +ボタンでOperationを追加、実行時にはOperationに追加されている順番でLoop回繰り返す
 
 ### 機能
@@ -12,16 +10,9 @@ fletとpyautoguiを用いたデスクトップ自動操作ツール
 - キー入力
 
 ### 開発環境
-### Mac:
-- ProductName:    macOS
-- CPU Architecture: arm64
-- ProductVersion: 14.1.1
-- BuildVersion:   23B81
-- PyCharm 2023.2.4 (Professional Edition)
- 
-### 実行環境
 - Python 3.10.13
 - conda 23.9.0
+- PyCharm 2023.2.4 (Professional Edition)
 
 ## 導入手順
 ### STEP 1:　リポジトリをクローン
