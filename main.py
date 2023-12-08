@@ -61,7 +61,8 @@ def main(page: ft.Page):
         task = ft.Row(
             [
                 cbx,
-                ft.IconButton(icon=ft.icons.DELETE, on_click=lambda e: delete_task(task))
+                ft.IconButton(icon=ft.icons.DELETE_SHARP, on_click=lambda e: delete_task(task)),
+                ft.IconButton(icon=ft.icons.COPY_SHARP, on_click=lambda e: copy_task(task)),
             ])
         task.data = operation_dict
         task_dict.update({id: operation_dict})
@@ -72,6 +73,17 @@ def main(page: ft.Page):
         id = e.data['id']
         task_view.controls.remove(e)
         task_dict.pop(id)
+        view.update()
+
+    # 選択タスクをコピーして追加
+    def copy_task(e):
+        print(e.data)
+        if e.data['type'] == TaskType.Click:
+            input_x.value = e.data['op'][0]
+            input_y.value = e.data['op'][1]
+            delta_x.value = e.data['delta'][0]
+            delta_y.value = e.data['delta'][1]
+        add_task(e, TaskType.Click)
         view.update()
 
     def clear_all_task(e):
