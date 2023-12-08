@@ -109,15 +109,15 @@ def main(page: ft.Page):
                 if is_execute is False:
                     break
                 if task['type'] == TaskType.Click:
-                    pyautogui.moveTo(task['op'][0] + counter * int(task['delta'][0]),
-                                     task['op'][1] + counter * int(task['delta'][1]), int(task['duration']) / 1000,
+                    pyautogui.moveTo(int(task['op'][0]) + counter * int(task['delta'][0]),
+                                     int(task['op'][1]) + counter * int(task['delta'][1]), int(task['duration']) / 1000,
                                      pyautogui.easeOutQuad)
                     pyautogui.click()
 
                 elif task['type'] == TaskType.Drag:
                     pyautogui.mouseDown()
-                    pyautogui.dragTo(task['op'][0] + counter * int(task['delta'][0]),
-                                     task['op'][1] + counter * int(task['delta'][1]), int(task['duration']) / 1000,
+                    pyautogui.dragTo(int(task['op'][0]) + counter * int(task['delta'][0]),
+                                     int(task['op'][1]) + counter * int(task['delta'][1]), int(task['duration']) / 1000,
                                      button='left')
                     pyautogui.mouseUp()
 
@@ -142,19 +142,19 @@ def main(page: ft.Page):
     def on_click(x, y, button, pressed):
         # 中クリックの場合
         if not pressed and str(button) == "Button.middle":
-            input_x.value = x
-            input_y.value = y
+            input_x.value = int(x)
+            input_y.value = int(y)
             # 増分初期化
             delta_x.value = 0
             delta_y.value = 0
             view.update()
 
     def update_position(x, y):
-        current_x_text.value = x
-        current_y_text.value = y
+        current_x_text.value = int(x)
+        current_y_text.value = int(y)
         if input_x.value != "" and input_y.value != "":
-            delta_x_text.value = x - input_x.value
-            delta_y_text.value = y - input_y.value
+            delta_x_text.value = int(x - input_x.value)
+            delta_y_text.value = int(y - input_y.value)
         view.update()
 
     def on_press(key):
