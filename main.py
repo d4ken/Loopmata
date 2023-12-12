@@ -41,7 +41,7 @@ def main(page: ft.Page):
         cbx = ft.Checkbox()
         operation_dict = dict()
         id = uuid.uuid4()
-        if task_type == TaskType.Click:
+        if task_type == TaskType.Click or task_type == TaskType.Drag:
             if delta_x != 0 or delta_y != 0:
                 cbx = ft.Checkbox(
                     label=f"{task_type.name} : ({input_x.value}, {input_y.value}), delta : ({int(delta_x.value)}, {int(delta_y.value)}), duration: {mouse_duration.value}ms")
@@ -121,11 +121,14 @@ def main(page: ft.Page):
                 if is_execute is False:
                     break
                 if task['type'] == TaskType.Click:
+                    x, y = pyautogui.position()
+                    r, g, b = pyautogui.pixel(x, y)
+                    print(r, g, b)
                     pyautogui.moveTo(int(task['op'][0]) + counter * int(task['delta'][0]),
                                      int(task['op'][1]) + counter * int(task['delta'][1]), int(task['duration']) / 1000,
                                      pyautogui.easeOutQuad)
-                    pyautogui.click()
 
+                    pyautogui.click()
                 elif task['type'] == TaskType.Drag:
                     pyautogui.mouseDown()
                     pyautogui.dragTo(int(task['op'][0]) + counter * int(task['delta'][0]),
